@@ -388,32 +388,55 @@
 
         function getColorClass(value) {
             if (value < 40) return 'low';
-            if (value < 70) return 'medium';
+            if (value <= 70) return 'medium';
             return 'high';
         }
 
         function getInterpretation(score) {
-            if (score >= 95) {
+            if (score > 70) {
                 return "Digital Master: Exceptional digital awareness and literacy. You demonstrate outstanding ability to navigate online spaces safely and critically.";
-            } else if (score >= 85) {
+            } else if (score >= 61) {
                 return "Digital Expert: Very high digital competence. Your understanding of digital environments and potential risks is advanced.";
-            } else if (score >= 75) {
+            } else if (score >= 51) {
                 return "Digital Proficient: Strong digital awareness. You show good judgment in online interactions and content evaluation.";
-            } else if (score >= 65) {
+            } else if (score >= 41) {
                 return "Digital Intermediate: Above average digital literacy. Some areas could benefit from additional attention and learning.";
-            } else if (score >= 55) {
-                return "Digital Developing: Basic digital awareness present. Consider focusing on improving critical thinking and online safety skills.";
-            } else if (score >= 45) {
-                return "Digital Basic: Limited digital awareness. Important to develop better understanding of online risks and information evaluation.";
             } else {
-                return "Digital Novice: Significant improvement needed in digital literacy and awareness. Recommended to seek guidance on online safety and critical thinking.";
+                return "Digital Novice: Foundational digital awareness level. Recommended to focus on developing online safety and critical thinking skills.";
             }
         }
 
         function generateRandomStats() {
+            // First determine which tier we want to hit (25% chance each except Novice)
+            const rand = Math.random();
+            let targetRange;
+            
+            if (rand < 0.25) {
+                // Master: 71-100
+                targetRange = { min: 71, max: 100 };
+            } else if (rand < 0.50) {
+                // Expert: 61-70
+                targetRange = { min: 61, max: 70 };
+            } else if (rand < 0.75) {
+                // Proficient: 51-60
+                targetRange = { min: 51, max: 60 };
+            } else if (rand < 1.0) {
+                // Intermediate: 41-50
+                targetRange = { min: 41, max: 50 };
+            }
+
             let totalScore = 0;
             metrics.forEach(metric => {
-                const value = Math.floor(Math.random() * 100);
+                // Generate a value that will help achieve the target range
+                const baseValue = Math.random() * (targetRange.max - targetRange.min) + targetRange.min;
+                
+                // Add some variation while mostly staying in range
+                let variation = (Math.random() - 0.5) * 20; // +/- 10 points
+                let value = Math.floor(baseValue + variation);
+                
+                // Ensure value stays within 0-100
+                value = Math.max(0, Math.min(100, value));
+                
                 totalScore += value;
                 const element = document.getElementById(metric);
                 const valueElement = document.getElementById(`${metric}Value`);
@@ -426,13 +449,14 @@
                 valueElement.textContent = `${value}%`;
             });
             
+            // Calculate average
             const averageScore = Math.round(totalScore / metrics.length);
             const averageScoreElement = document.getElementById('averageScoreValue');
             const interpretationElement = document.getElementById('scoreInterpretation');
             
             averageScoreElement.textContent = `${averageScore}%`;
-            averageScoreElement.style.color = averageScore >= 75 ? '#00ff00' : 
-                                            averageScore >= 45 ? '#ffaa00' : '#ff4444';
+            averageScoreElement.style.color = averageScore > 70 ? '#00ff00' : 
+                                            averageScore >= 41 ? '#ffaa00' : '#ff4444';
             interpretationElement.textContent = getInterpretation(averageScore);
         }
 
