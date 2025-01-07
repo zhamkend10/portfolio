@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Awareness Scanner</title>
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #000;
+            color: white;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .title {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 3rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            font-weight: 500;
+            width: 675px;
+            text-align: center;
+        }
+
+        .main-content {
+            display: flex;
+            width: 675px;
+            height: 600px;
+        }
+
+        /* Left Box - Stats */
+        .stats-box {
+            width: 50%;
+            background: #111;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-right: none;
+            border-radius: 12px 0 0 12px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .stats-container {
+            flex: 1;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            overflow-y: auto;
+        }
+
+        .stat-item {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            letter-spacing: 0.5px;
+        }
+
+        .progress-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .progress-bar {
+            flex: 1;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            width: 0%;
+            transition: all 0.3s ease;
+        }
+
+        .progress-fill.low { background: #ff4444; }
+        .progress-fill.medium { background: #ffaa00; }
+        .progress-fill.high { background: #00ff00; }
+
+        .progress-value {
+            min-width: 45px;
+            text-align: right;
+            font-size: 0.9rem;
+        }
+
+        .average-container {
+            padding: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .average-score {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.8rem;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .score-interpretation {
+            font-size: 0.9rem;
+            line-height: 1.4;
+            text-align: center;
+            opacity: 0.9;
+        }
+
+        /* Right Box - Camera */
+        .camera-box {
+            width: 50%;
+            background: #111;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 0 12px 12px 0;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .camera-placeholder {
+            color: #666;
+            font-size: 1rem;
+            text-align: center;
+        }
+
+        /* Controls */
+        .controls {
+            display: flex;
+            gap: 10px;
+        }
+
+        button {
+            padding: 12px 24px;
+            border-radius: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(0, 0, 0, 0.6);
+            color: white;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        button:hover {
+            background: rgba(0, 0, 0, 0.8);
+            border-color: rgba(255, 255, 255, 0.4);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="title">Digital Awareness Scanner</h1>
+        
+        <div class="main-content">
+            <!-- Left Box - Stats -->
+            <div class="stats-box">
+                <div class="stats-container">
+                    <div class="stat-item">
+                        <div class="stat-label">Radicalization Risk</div>
+                        <div class="progress-container">
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="radicalization"></div>
+                            </div>
+                            <div class="progress-value" id="radicalizationValue">0%</div>
+                        </div>
+                    </div>
+
+                    <div class="stat-item">
+                        <div class="stat-label">Content Diversity Score</div>
+                        <div class="progress-container">
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="contentDiversity"></div>
+                            </div>
+                            <div class="progress-value" id="contentDiversityValue">0%</div>
+                        </div>
+                    </div>
+
+                    <div class="stat-item">
+                        <div class="stat-label">Bot Detection Rate</div>
+                        <div class="progress-container">
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="botDetection"></div>
+                            </div>
+                            <div class="progress-value" id="botDetectionValue">0%</div>
+                        </div>
+                    </div>
+
+                    <div class="stat-item">
+                        <div class="stat-label">Critical Thinking Index</div>
+                        <div class="progress-container">
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="criticalThinking"></div>
+                            </div>
+                            <div class="progress-value" id="criticalThinkingValue">0%</div>
+                        </div>
+                    </div>
+
+                    <div class="stat-item">
+                        <div class="stat-label">Bias Awareness Level</div>
+                        <div class="progress-container">
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="biasAwareness"></div>
+                            </div>
+                            <div class="progress-value" id="biasAwarenessValue">0%</div>
+                        </div>
+                    </div>
+
+                    <div class="stat-item">
+                        <div class="stat-label">Digital Literacy Score</div>
+                        <div class="progress-container">
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="digitalLiteracy"></div>
+                            </div>
+                            <div class="progress-value" id="digitalLiteracyValue">0%</div>
+                        </div>
+                    </div>
+
+                    <div class="stat-item">
+                        <div class="stat-label">Privacy Protection</div>
+                        <div class="progress-container">
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="privacyProtection"></div>
+                            </div>
+                            <div class="progress-value" id="privacyProtectionValue">0%</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="average-container">
+                    <div class="average-score">Average Score: <span id="averageScoreValue">0%</span></div>
+                    <div class="score-interpretation" id="scoreInterpretation"></div>
+                </div>
+            </div>
+
+            <!-- Right Box - Camera -->
+            <div class="camera-box">
+                <video id="video" autoplay playsinline></video>
+                <div class="camera-placeholder" id="camera-placeholder">Camera inactive</div>
+            </div>
+        </div>
+
+        <div class="controls">
+            <button id="cameraButton">Start Camera</button>
+            <button id="analyzeButton">Analyze Digital Awareness</button>
+        </div>
+    </div>
+
+    <script>
+        let stream = null;
+        const video = document.getElementById('video');
+        const cameraButton = document.getElementById('cameraButton');
+        const analyzeButton = document.getElementById('analyzeButton');
+        const cameraPlaceholder = document.getElementById('camera-placeholder');
+
+        const metrics = [
+            'radicalization',
+            'contentDiversity',
+            'botDetection',
+            'criticalThinking',
+            'biasAwareness',
+            'digitalLiteracy',
+            'privacyProtection'
+        ];
+
+        async function startCamera() {
+            try {
+                const constraints = {
+                    video: {
+                        width: { ideal: 1920 },
+                        height: { ideal: 1080 },
+                        facingMode: 'user'
+                    }
+                };
+                
+                stream = await navigator.mediaDevices.getUserMedia(constraints);
+                video.srcObject = stream;
+                cameraPlaceholder.style.display = 'none';
+                cameraButton.textContent = 'Stop Camera';
+            } catch (err) {
+                console.error('Error accessing camera:', err);
+                alert('Could not access the camera. Please make sure you have granted camera permissions.');
+            }
+        }
+
+        function stopCamera() {
+            if (stream) {
+                stream.getTracks().forEach(track => track.stop());
+                stream = null;
+                video.srcObject = null;
+                cameraPlaceholder.style.display = 'flex';
+                cameraButton.textContent = 'Start Camera';
+            }
+        }
+
+        function getColorClass(value) {
+            if (value < 40) return 'low';
+            if (value < 70) return 'medium';
+            return 'high';
+        }
+
+        function getInterpretation(score) {
+            if (score >= 95) {
+                return "Digital Master: Exceptional digital awareness and literacy. You demonstrate outstanding ability to navigate online spaces safely and critically.";
+            } else if (score >= 85) {
+                return "Digital Expert: Very high digital competence. Your understanding of digital environments and potential risks is advanced.";
+            } else if (score >= 75) {
+                return "Digital Proficient: Strong digital awareness. You show good judgment in online interactions and content evaluation.";
+            } else if (score >= 65) {
+                return "Digital Intermediate: Above average digital literacy. Some areas could benefit from additional attention and learning.";
+            } else if (score >= 55) {
+                return "Digital Developing: Basic digital awareness present. Consider focusing on improving critical thinking and online safety skills.";
+            } else if (score >= 45) {
+                return "Digital Basic: Limited digital awareness. Important to develop better understanding of online risks and information evaluation.";
+            } else {
+                return "Digital Novice: Significant improvement needed in digital literacy and awareness. Recommended to seek guidance on online safety and critical thinking.";
+            }
+        }
+
+        function generateRandomStats() {
+            let totalScore = 0;
+            metrics.forEach(metric => {
+                const value = Math.floor(Math.random() * 100);
+                totalScore += value;
+                const element = document.getElementById(metric);
+                const valueElement = document.getElementById(`${metric}Value`);
+                
+                element.classList.remove('low', 'medium', 'high');
+                const colorClass = getColorClass(value);
+                element.classList.add(colorClass);
+                
+                element.style.width = `${value}%`;
+                valueElement.textContent = `${value}%`;
+            });
+            
+            const averageScore = Math.round(totalScore / metrics.length);
+            const averageScoreElement = document.getElementById('averageScoreValue');
+            const interpretationElement = document.getElementById('scoreInterpretation');
+            
+            averageScoreElement.textContent = `${averageScore}%`;
+            averageScoreElement.style.color = averageScore >= 75 ? '#00ff00' : 
+                                            averageScore >= 45 ? '#ffaa00' : '#ff4444';
+            interpretationElement.textContent = getInterpretation(averageScore);
+        }
+
+        cameraButton.addEventListener('click', () => {
+            if (stream) {
+                stopCamera();
+            } else {
+                startCamera();
+            }
+        });
+
+        analyzeButton.addEventListener('click', generateRandomStats);
+    </script>
+</body>
+</html>
