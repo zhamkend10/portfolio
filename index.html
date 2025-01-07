@@ -52,42 +52,64 @@
 
         /* Media Queries */
         @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+
             .main-content {
-                flex-direction: column;
+                flex-direction: row;
                 min-height: auto;
+                height: 85vh;
+                max-height: 600px;
             }
 
             .stats-box, .camera-box {
-                width: 100%;
-                border-radius: 12px;
-                border: 1px solid rgba(255, 255, 255, 0.1);
+                width: 50%;
+                height: 100%;
             }
 
             .stats-box {
-                border-bottom: none;
-                border-radius: 12px 12px 0 0;
+                border-radius: 12px 0 0 12px;
+                border-right: none;
             }
 
             .camera-box {
-                aspect-ratio: 9/16;
-                border-radius: 0 0 12px 12px;
+                border-radius: 0 12px 12px 0;
+                border: 1px solid rgba(255, 255, 255, 0.1);
             }
 
             .controls {
-                flex-direction: column;
                 width: 100%;
             }
 
             button {
-                width: 100%;
+                font-size: 0.9rem;
+                padding: 10px 16px;
+            }
+
+            .stat-label {
+                font-size: 0.8rem;
+            }
+
+            .progress-value {
+                font-size: 0.8rem;
+            }
+
+            .average-score {
+                font-size: 1.4rem;
+            }
+
+            .score-interpretation {
+                font-size: 0.8rem;
             }
 
             .progress-container {
                 flex: 1;
+                min-width: 0;
             }
 
             .stat-item {
-                padding-right: 10px;
+                padding-right: 5px;
             }
         }
 
@@ -411,6 +433,20 @@
             averageScoreElement.style.color = averageScore >= 75 ? '#00ff00' : 
                                             averageScore >= 45 ? '#ffaa00' : '#ff4444';
             interpretationElement.textContent = getInterpretation(averageScore);
+        }
+
+        cameraButton.addEventListener('click', () => {
+            if (stream) {
+                stopCamera();
+            } else {
+                startCamera();
+            }
+        });
+
+        analyzeButton.addEventListener('click', generateRandomStats);
+    </script>
+</body>
+</html>    interpretationElement.textContent = getInterpretation(averageScore);
         }
 
         cameraButton.addEventListener('click', () => {
