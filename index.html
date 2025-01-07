@@ -20,6 +20,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            padding: 20px;
         }
 
         .container {
@@ -27,22 +28,67 @@
             flex-direction: column;
             align-items: center;
             gap: 20px;
+            width: 100%;
+            max-width: 675px;
         }
 
         .title {
             font-family: 'Rajdhani', sans-serif;
-            font-size: 3rem;
+            font-size: clamp(2rem, 5vw, 3.5rem);
             text-transform: uppercase;
             letter-spacing: 3px;
             font-weight: 500;
-            width: 675px;
+            width: 100%;
             text-align: center;
         }
 
         .main-content {
             display: flex;
-            width: 675px;
-            height: 600px;
+            width: 100%;
+            height: auto;
+            min-height: 600px;
+            flex-direction: row;
+        }
+
+        /* Media Queries */
+        @media (max-width: 768px) {
+            .main-content {
+                flex-direction: column;
+                min-height: auto;
+            }
+
+            .stats-box, .camera-box {
+                width: 100%;
+                border-radius: 12px;
+                border: 1px solid rgba(255, 255, 255, 0.1);
+            }
+
+            .stats-box {
+                border-bottom: none;
+                border-radius: 12px 12px 0 0;
+            }
+
+            .camera-box {
+                aspect-ratio: 9/16;
+                border-radius: 0 0 12px 12px;
+            }
+
+            .controls {
+                flex-direction: column;
+                width: 100%;
+            }
+
+            button {
+                width: 100%;
+            }
+
+            .progress-container {
+                flex: 1;
+            }
+
+            .stat-item {
+                padding-right: 10px;
+            }
         }
 
         /* Left Box - Stats */
