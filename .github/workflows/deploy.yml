@@ -23,4 +23,4 @@ jobs:
           port: 22
           source: "dist/"                     # Change if you use dist/build
           target: "/"
-          strip_components: 0       # Remove root folder from archive
+          strip_components: 1     # Remove root folder from archive
