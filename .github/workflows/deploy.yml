@@ -1,25 +1,26 @@
-name: 🚀 Deploy to Strato via FTP
+name: 🚀 Deploy to Strato via SFTP
 
 on:
   push:
     branches:
-      - main  # or 'master', depending on your repo
+      - main  # or master, if that’s your default
 
 jobs:
-  ftp-deploy:
-    name: Upload website to Strato
+  sftp-deploy:
+    name: Upload website to Strato via SFTP
     runs-on: ubuntu-latest
 
     steps:
-    - name: 📥 Checkout repo
-      uses: actions/checkout@v3
+      - name: 📥 Checkout repo
+        uses: actions/checkout@v3
 
-    - name: 🚀 Deploy via FTP
-      uses: SamKirkland/FTP-Deploy-Action@v4.3.4
-      with:
-        server: ${{ secrets.FTP_HOST }}
-        username: ${{ secrets.FTP_USERNAME }}
-        password: ${{ secrets.FTP_PASSWORD }}
-        server-dir: ${{ secrets.FTP_TARGET || '/htdocs/' }}
-        local-dir: ./  # Use './build' or './dist' if using React/Vite/etc
-        dangerous-clean-slate: true  # optional: clears remote files
+      - name: 🚀 Deploy via SFTP
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.SFTP_HOST }}
+          username: ${{ secrets.SFTP_USERNAME }}
+          password: ${{ secrets.SFTP_PASSWORD }}
+          port: 22
+          source: "."                     # Change if you use dist/build
+          target: ${{ secrets.SFTP_TARGET || '/htdocs/' }}
+          strip_components: 1             # Remove root folder from archive
