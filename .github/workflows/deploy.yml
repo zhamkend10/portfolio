@@ -21,6 +21,6 @@ jobs:
           username: ${{ secrets.SFTP_USERNAME }}
           password: ${{ secrets.SFTP_PASSWORD }}
           port: 22
-          source: "."                     # Change if you use dist/build
+          source: "dist"                     # Change if you use dist/build
           target: "/"
-          strip_components: 1             # Remove root folder from archive
+          strip_components: 0       # Remove root folder from archive
