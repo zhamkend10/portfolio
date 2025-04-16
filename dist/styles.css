@@ -6,7 +6,7 @@ body {
   min-height: 100vh;
   display: flex;
   justify-content: center;
-  font-family: "ClashDisplay-Regular";
+  font-family: "ClashDisplay-Regular", sans-serif;
   background-color: #e6820060;
 }
 
